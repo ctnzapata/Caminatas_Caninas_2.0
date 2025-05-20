@@ -1,7 +1,9 @@
 🐾 Caminatas Caninas 2.0
+
 Caminatas Caninas 2.0 es un proyecto de software libre desarrollado en Python y MySQL, diseñado para gestionar y promover caminatas comunitarias con caninos. Este sistema facilita la organización de eventos, el registro de participantes y la administración de rutas, contribuyendo al bienestar de las mascotas y fomentando la interacción social entre los dueños.
 
 🚀 Características
+
 Gestión de usuarios: Registro y autenticación de participantes.
 
 Organización de eventos: Creación y seguimiento de caminatas programadas.
@@ -13,6 +15,7 @@ Base de datos robusta: Utilización de MySQL para almacenar y gestionar la infor
 Interfaz intuitiva: Aplicación desarrollada en Python con una interfaz sencilla para facilitar su uso.
 
 🛠️ Tecnologías utilizadas
+
 Lenguaje de programación: Python
 
 Base de datos: MySQL
