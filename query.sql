@@ -37,7 +37,7 @@ CREATE TABLE perros (
     nombre VARCHAR(100),
     edad INT,
     raza VARCHAR(100),
-    tamaño ENUM('pequeño', 'mediano', 'grande'),
+    tamanio ENUM('pequeño', 'mediano', 'grande'),
     energia ENUM('baja', 'media', 'alta'),
     descripcion TEXT,
     estado ENUM('disponible', 'adoptado', 'en paseo') DEFAULT 'disponible',
