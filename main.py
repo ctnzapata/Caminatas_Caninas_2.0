@@ -3,10 +3,13 @@ from Repositorios.UsuariosRepositorio import UsuariosRepositorio
 from Repositorios.PerrosRepositorio import PerrosRepositorio
 from Repositorios.RefugiosRepositorio import RefugiosRepositorio
 from Repositorios.EquipamientoRepositorio import EquipamientoRepositorio
+from Repositorios.HorariosRepositorio import HorariosRepositorio
 from Entidades.Usuarios import Usuarios
 from Entidades.Perros import Perros
 from Entidades.Refugios import Refugios
 from Entidades.Equipamiento import Equipamiento
+from Entidades.Horarios import Horarios
+
 import datetime
 
 def mostrar_menu_principal():
@@ -16,7 +19,8 @@ def mostrar_menu_principal():
     print("3. Gestionar Perros (CRUD)")
     print("4. Gestionar Refugios (CRUD)")
     print("5. Gestionar Equipamiento (CRUD)")
-    print("6. Salir")
+    print("6. Gestionar Horarios (CRUD)")
+    print("7. Salir")
 
 def mostrar_menu_usuarios():
     print("\n--- GESTIÓN DE USUARIOS ---")
@@ -53,6 +57,16 @@ def mostrar_menu_equipamiento():
     print("4. Eliminar Equipamiento")
     print("5. Buscar Equipamiento por ID")
     print("6. Volver al menú principal")
+
+def mostrar_menu_horarios():
+    print("\n--- GESTIÓN DE HORARIOS ---")
+    print("1. Listar Horarios")
+    print("2. Agregar Horario")
+    print("3. Actualizar Horario")
+    print("4. Eliminar Horario")
+    print("5. Buscar Horario por ID")
+    print("6. Volver al menú principal")
+
 
 def consultar_caminatas():
     repo = CaminatasRepositorio()
@@ -338,6 +352,75 @@ def gestionar_equipamiento():
     
     repo.cerrar_conexion()
 
+def gestionar_horarios():
+    repo = HorariosRepositorio()
+    
+    while True:
+        mostrar_menu_horarios()
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            horarios = repo.obtener_todos()
+            print("\n--- LISTADO DE HORARIOS ---")
+            for h in horarios:
+                print(f"{h.GetId()} - Día: {h.GetDia_semana()} | Inicio: {h.GetHora_inicio()} | Fin: {h.GetHora_fin()} | Max voluntarios: {h.GetMax_voluntarios()}")
+
+        elif opcion == "2":
+            horario = Horarios()
+            horario.SetDia_semana(input("Día de la semana: "))
+            horario.SetHora_inicio(input("Hora inicio (HH:MM:SS): "))
+            horario.SetHora_fin(input("Hora fin (HH:MM:SS): "))
+            horario.SetMax_voluntarios(int(input("Máximo voluntarios: ")))
+            
+            nuevo_id = repo.crear(horario)
+            print(f"✅ Horario creado con ID: {nuevo_id}")
+
+        elif opcion == "3":
+            id_horario = int(input("ID del horario a actualizar: "))
+            horario = repo.obtener_por_id(id_horario)
+            
+            if horario:
+                horario.SetDia_semana(input(f"Día de la semana ({horario.GetDia_semana()}): ") or horario.GetDia_semana())
+                horario.SetHora_inicio(input(f"Hora inicio ({horario.GetHora_inicio()}): ") or horario.GetHora_inicio())
+                horario.SetHora_fin(input(f"Hora fin ({horario.GetHora_fin()}): ") or horario.GetHora_fin())
+                max_vol = input(f"Máximo voluntarios ({horario.GetMax_voluntarios()}): ")
+                horario.SetMax_voluntarios(int(max_vol) if max_vol else horario.GetMax_voluntarios())
+
+                if repo.actualizar(horario):
+                    print("✅ Horario actualizado correctamente.")
+                else:
+                    print("❌ Error al actualizar el horario.")
+            else:
+                print("❌ Horario no encontrado.")
+
+        elif opcion == "4":
+            id_horario = int(input("ID del horario a eliminar: "))
+            if repo.eliminar(id_horario):
+                print("✅ Horario eliminado correctamente.")
+            else:
+                print("❌ Error al eliminar el horario o horario no encontrado.")
+
+        elif opcion == "5":
+            id_horario = int(input("ID del horario a buscar: "))
+            horario = repo.obtener_por_id(id_horario)
+            if horario:
+                print("\n--- DETALLE DEL HORARIO ---")
+                print(f"ID: {horario.GetId()}")
+                print(f"Día de la semana: {horario.GetDia_semana()}")
+                print(f"Hora inicio: {horario.GetHora_inicio()}")
+                print(f"Hora fin: {horario.GetHora_fin()}")
+                print(f"Máximo voluntarios: {horario.GetMax_voluntarios()}")
+            else:
+                print("❌ Horario no encontrado.")
+
+        elif opcion == "6":
+            break
+        else:
+            print("❌ Opción no válida. Intente de nuevo.")
+    
+    repo.cerrar_conexion()
+
+
 def main():
     while True:
         mostrar_menu_principal()
@@ -354,6 +437,8 @@ def main():
         elif opcion == "5":
             gestionar_equipamiento()
         elif opcion == "6":
+            gestionar_horarios()
+        elif opcion == "7":
             print("👋 Saliendo del sistema...")
             break
         else:

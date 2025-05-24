@@ -362,4 +362,82 @@ BEGIN
     DELETE FROM Equipamiento WHERE id = p_id;
 END //
 
+-- Obtener todos los horarios
+CREATE PROCEDURE ObtenerHorarios()
+BEGIN
+    SELECT 
+        id,
+        dia_semana,
+        hora_inicio,
+        hora_fin,
+        max_voluntarios
+    FROM 
+        Horarios;
+END //
+
+-- Obtener un horario por ID
+CREATE PROCEDURE ObtenerHorarioPorID(IN p_id INT)
+BEGIN
+    SELECT 
+        id,
+        dia_semana,
+        hora_inicio,
+        hora_fin,
+        max_voluntarios
+    FROM 
+        Horarios
+    WHERE 
+        id = p_id;
+END //
+
+-- Crear un nuevo horario
+CREATE PROCEDURE CrearHorario(
+    IN p_dia_semana VARCHAR(20),
+    IN p_hora_inicio TIME,
+    IN p_hora_fin TIME,
+    IN p_max_voluntarios INT
+)
+BEGIN
+    INSERT INTO Horarios (
+        dia_semana,
+        hora_inicio,
+        hora_fin,
+        max_voluntarios
+    )
+    VALUES (
+        p_dia_semana,
+        p_hora_inicio,
+        p_hora_fin,
+        p_max_voluntarios
+    );
+
+    SELECT LAST_INSERT_ID() AS nuevo_id;
+END //
+
+
+-- Actualizar un horario existente
+CREATE PROCEDURE ActualizarHorario(
+    IN p_id INT,
+    IN p_dia_semana VARCHAR(20),
+    IN p_hora_inicio TIME,
+    IN p_hora_fin TIME,
+    IN p_max_voluntarios INT
+)
+BEGIN
+    UPDATE Horarios
+    SET 
+        dia_semana = p_dia_semana,
+        hora_inicio = p_hora_inicio,
+        hora_fin = p_hora_fin,
+        max_voluntarios = p_max_voluntarios
+    WHERE 
+        id = p_id;
+END //
+
+-- Eliminar un horario
+CREATE PROCEDURE EliminarHorario(IN p_id INT)
+BEGIN
+    DELETE FROM Horarios WHERE id = p_id;
+END //
+
 DELIMITER ;
