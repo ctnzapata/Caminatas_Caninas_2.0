@@ -1,12 +1,14 @@
 import pyodbc
 from Entidades.Usuarios import Usuarios
 from Utilidades.Configuracion import Configuracion
+from Utilidades.Encriptado import EncriptarAES
 import datetime
 
 class UsuariosRepositorio:
     def __init__(self):
         self.conn = Configuracion.obtener_conexion()
         self.cursor = self.conn.cursor()
+        self.encriptador = EncriptarAES()
 
     def obtener_usuarios(self):
         self.cursor.execute("{CALL obtener_usuarios()}")
@@ -18,7 +20,13 @@ class UsuariosRepositorio:
             usuario.SetId(row[0])
             usuario.SetNombre(row[1])
             usuario.SetCorreo(row[2])
-            usuario.SetContrasenia(row[3])
+            
+            try:
+                contrasenia = self.encriptador.decifrar(row[3])
+            except Exception:
+                contrasenia = "[Error de descifrado]"
+
+            usuario.SetContrasenia(contrasenia)
             usuario.SetRol(row[4])
             usuario.SetFecha_registro(row[5])
             usuarios.append(usuario)
@@ -26,21 +34,23 @@ class UsuariosRepositorio:
         return usuarios
 
     def insertar_usuario(self, usuario: Usuarios):
-        self.cursor.execute("{CALL insertar_usuario (?, ?, ?, ?, ?)}", 
+        contrasenia_cifrada = self.encriptador.cifrar(usuario.GetContrasenia())
+        self.cursor.execute("{CALL insertar_usuario (?, ?, ?, ?, ?)}",
             usuario.GetNombre(),
             usuario.GetCorreo(),
-            usuario.GetContrasenia(),
+            contrasenia_cifrada,
             usuario.GetRol(),
             usuario.GetFecha_registro() or datetime.datetime.now()
         )
         self.conn.commit()
 
     def actualizar_usuario(self, usuario: Usuarios):
+        contrasenia_cifrada = self.encriptador.cifrar(usuario.GetContrasenia())
         self.cursor.execute("{CALL actualizar_usuario (?, ?, ?, ?, ?)}", 
             usuario.GetId(),
             usuario.GetNombre(),
             usuario.GetCorreo(),
-            usuario.GetContrasenia(),
+            contrasenia_cifrada,
             usuario.GetRol()
         )
         self.conn.commit()
