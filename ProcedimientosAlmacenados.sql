@@ -441,3 +441,87 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE ObtenerHistorialCaminatas()
+BEGIN
+    SELECT 
+        id,
+        registro_caminata_id,
+        duracion_real_min,
+        distancia_real_km,
+        comportamiento_perro,
+        observaciones
+    FROM 
+        historial_caminatas;
+END //
+
+CREATE PROCEDURE ObtenerHistorialCaminataPorID(IN p_id INT)
+BEGIN
+    SELECT 
+        id,
+        registro_caminata_id,
+        duracion_real_min,
+        distancia_real_km,
+        comportamiento_perro,
+        observaciones
+    FROM 
+        historial_caminatas
+    WHERE 
+        id = p_id;
+END //
+
+CREATE PROCEDURE CrearHistorialCaminata(
+    IN p_registro_caminata_id INT,
+    IN p_duracion_real_min INT,
+    IN p_distancia_real_km DECIMAL(5,2),
+    IN p_comportamiento_perro ENUM('excelente', 'bueno', 'regular', 'malo'),
+    IN p_observaciones TEXT,
+    OUT p_nuevo_id INT
+)
+BEGIN
+    INSERT INTO historial_caminatas (
+        registro_caminata_id,
+        duracion_real_min,
+        distancia_real_km,
+        comportamiento_perro,
+        observaciones
+    )
+    VALUES (
+        p_registro_caminata_id,
+        p_duracion_real_min,
+        p_distancia_real_km,
+        p_comportamiento_perro,
+        p_observaciones
+    );
+    
+    SET p_nuevo_id = LAST_INSERT_ID();
+END //
+
+CREATE PROCEDURE ActualizarHistorialCaminata(
+    IN p_id INT,
+    IN p_registro_caminata_id INT,
+    IN p_duracion_real_min INT,
+    IN p_distancia_real_km DECIMAL(5,2),
+    IN p_comportamiento_perro ENUM('excelente', 'bueno', 'regular', 'malo'),
+    IN p_observaciones TEXT
+)
+BEGIN
+    UPDATE historial_caminatas
+    SET 
+        registro_caminata_id = p_registro_caminata_id,
+        duracion_real_min = p_duracion_real_min,
+        distancia_real_km = p_distancia_real_km,
+        comportamiento_perro = p_comportamiento_perro,
+        observaciones = p_observaciones
+    WHERE 
+        id = p_id;
+END //
+
+CREATE PROCEDURE EliminarHistorialCaminata(IN p_id INT)
+BEGIN
+    DELETE FROM historial_caminatas WHERE id = p_id;
+END //
+
+DELIMITER ;

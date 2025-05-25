@@ -4,11 +4,15 @@ from Repositorios.PerrosRepositorio import PerrosRepositorio
 from Repositorios.RefugiosRepositorio import RefugiosRepositorio
 from Repositorios.EquipamientoRepositorio import EquipamientoRepositorio
 from Repositorios.HorariosRepositorio import HorariosRepositorio
+from Repositorios.HistorialCaminatasRepositorio import HistorialCaminatasRepositorio
+
 from Entidades.Usuarios import Usuarios
 from Entidades.Perros import Perros
 from Entidades.Refugios import Refugios
 from Entidades.Equipamiento import Equipamiento
 from Entidades.Horarios import Horarios
+from Entidades.HistorialCaminatas import HistorialCaminatas
+
 
 import datetime
 
@@ -20,7 +24,8 @@ def mostrar_menu_principal():
     print("4. Gestionar Refugios (CRUD)")
     print("5. Gestionar Equipamiento (CRUD)")
     print("6. Gestionar Horarios (CRUD)")
-    print("7. Salir")
+    print("7. Gestionar Historial Caminatas (CRUD)")
+    print("8. Salir")
 
 def mostrar_menu_usuarios():
     print("\n--- GESTIÓN DE USUARIOS ---")
@@ -65,6 +70,15 @@ def mostrar_menu_horarios():
     print("3. Actualizar Horario")
     print("4. Eliminar Horario")
     print("5. Buscar Horario por ID")
+    print("6. Volver al menú principal")
+
+def mostrar_menu_historial_caminatas():
+    print("\n--- GESTIÓN DE HISTORIAL DE CAMINATAS ---")
+    print("1. Listar Historial de Caminatas")
+    print("2. Agregar Historial de Caminata")
+    print("3. Actualizar Historial de Caminata")
+    print("4. Eliminar Historial de Caminata")
+    print("5. Buscar Historial de Caminata por ID")
     print("6. Volver al menú principal")
 
 
@@ -420,6 +434,83 @@ def gestionar_horarios():
     
     repo.cerrar_conexion()
 
+def gestionar_historial_caminatas():
+    repo = HistorialCaminatasRepositorio()
+
+    while True:
+        mostrar_menu_historial_caminatas()
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            caminatas = repo.obtener_todos()
+            print("\n--- LISTADO DE HISTORIAL DE CAMINATAS ---")
+            for c in caminatas:
+                print(f"{c.GetId()} - Registro Caminata ID: {c.GetRegistro_caminata_id()}, Duración (min): {c.GetDuracion_real_min()}, "
+                      f"Distancia (km): {c.GetDistancia_real_km()}, Comportamiento: {c.GetComportamiento_perro()}, Observaciones: {c.GetObservaciones()}")
+
+        elif opcion == "2":
+            caminata = HistorialCaminatas()
+            caminata.SetRegistro_caminata_id(int(input("ID del registro de caminata: ")))
+            caminata.SetDuracion_real_min(int(input("Duración real (min): ")))
+            caminata.SetDistancia_real_km(float(input("Distancia real (km): ")))
+            caminata.SetComportamiento_perro(input("Comportamiento del perro (excelente, bueno, regular, malo): ").lower())
+            caminata.SetObservaciones(input("Observaciones: "))
+            
+            nuevo_id = repo.crear(caminata)
+            print(f"✅ Historial de caminata creado con ID: {nuevo_id}")
+
+        elif opcion == "3":
+            id_caminata = int(input("ID de la caminata a actualizar: "))
+            caminata = repo.obtener_por_id(id_caminata)
+
+            if caminata:
+                registro_id = input(f"ID registro caminata ({caminata.GetRegistro_caminata_id()}): ") or caminata.GetRegistro_caminata_id()
+                duracion = input(f"Duración real (min) ({caminata.GetDuracion_real_min()}): ") or caminata.GetDuracion_real_min()
+                distancia = input(f"Distancia real (km) ({caminata.GetDistancia_real_km()}): ") or caminata.GetDistancia_real_km()
+                comportamiento = input(f"Comportamiento perro ({caminata.GetComportamiento_perro()}): ").lower() or caminata.GetComportamiento_perro()
+                observaciones = input(f"Observaciones ({caminata.GetObservaciones()}): ") or caminata.GetObservaciones()
+
+                caminata.SetRegistro_caminata_id(int(registro_id))
+                caminata.SetDuracion_real_min(int(duracion))
+                caminata.SetDistancia_real_km(float(distancia))
+                caminata.SetComportamiento_perro(comportamiento)
+                caminata.SetObservaciones(observaciones)
+
+                if repo.actualizar(caminata):
+                    print("✅ Historial de caminata actualizado correctamente.")
+                else:
+                    print("❌ Error al actualizar el historial de caminata.")
+            else:
+                print("❌ Historial de caminata no encontrado.")
+
+        elif opcion == "4":
+            id_caminata = int(input("ID de la caminata a eliminar: "))
+            if repo.eliminar(id_caminata):
+                print("✅ Historial de caminata eliminado correctamente.")
+            else:
+                print("❌ Error al eliminar el historial de caminata o no encontrado.")
+
+        elif opcion == "5":
+            id_caminata = int(input("ID de la caminata a buscar: "))
+            caminata = repo.obtener_por_id(id_caminata)
+            if caminata:
+                print("\n--- DETALLE DEL HISTORIAL DE CAMINATA ---")
+                print(f"ID: {caminata.GetId()}")
+                print(f"ID Registro Caminata: {caminata.GetRegistro_caminata_id()}")
+                print(f"Duración real (min): {caminata.GetDuracion_real_min()}")
+                print(f"Distancia real (km): {caminata.GetDistancia_real_km()}")
+                print(f"Comportamiento del perro: {caminata.GetComportamiento_perro()}")
+                print(f"Observaciones: {caminata.GetObservaciones()}")
+            else:
+                print("❌ Historial de caminata no encontrado.")
+
+        elif opcion == "6":
+            break
+        else:
+            print("❌ Opción no válida. Intente de nuevo.")
+
+    repo.cerrar_conexion()
+
 
 def main():
     while True:
@@ -439,6 +530,8 @@ def main():
         elif opcion == "6":
             gestionar_horarios()
         elif opcion == "7":
+            gestionar_historial_caminatas()
+        elif opcion == "8":
             print("👋 Saliendo del sistema...")
             break
         else:

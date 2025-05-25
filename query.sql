@@ -190,19 +190,19 @@ INSERT INTO horarios (dia_semana, hora_inicio, hora_fin, max_voluntarios) VALUES
 ('Miércoles', '17:00:00', '18:00:00', 3),
 ('Viernes', '16:00:00', '17:30:00', 6);
 
--- 7. Caminatas
+-- 7. Caminatas 
 INSERT INTO caminatas (fecha, horario_id, ruta_id, estado) VALUES
-('2025-04-21', 1, 1, 'pendiente'),
-('2025-04-22', 2, 2, 'pendiente'),
-('2025-04-23', 3, 3, 'pendiente'),
-('2025-04-24', 4, 4, 'pendiente');
+('2025-04-21', 10, 1, 'pendiente'),
+('2025-04-22', 9, 2, 'pendiente'),
+('2025-04-23', 8, 3, 'pendiente'),
+('2025-04-24', 7, 4, 'pendiente');
 
 -- 8. Registro de Caminatas
 INSERT INTO registro_caminatas (usuario_id, caminata_id, perro_id, asistencia, comentarios) VALUES
-(1, 1, 1, TRUE, 'Todo bien'),
-(2, 2, 2, TRUE, 'Muy animado el perro'),
-(3, 3, 3, FALSE, 'No pudo asistir'),
-(1, 4, 4, TRUE, 'Excelente experiencia');
+(1, 17, 1, TRUE, 'Todo bien'),
+(2, 20, 2, TRUE, 'Muy animado el perro'),
+(3, 18, 3, FALSE, 'No pudo asistir'),
+(4, 19, 4, TRUE, 'Excelente experiencia');
 
 -- 9. Preferencias de perros
 INSERT INTO preferencias_perros (usuario_id, perro_id, preferencia) VALUES
@@ -220,10 +220,10 @@ INSERT INTO preferencias_rutas (usuario_id, ruta_id, preferencia) VALUES
 
 -- 11. Historial de caminatas
 INSERT INTO historial_caminatas (registro_caminata_id, duracion_real_min, distancia_real_km, comportamiento_perro, observaciones) VALUES
-(1, 35, 2.4, 'excelente', 'Muy tranquilo'),
-(2, 90, 5.1, 'bueno', 'Se emocionó con otros perros'),
-(4, 55, 4.0, 'excelente', 'Muy obediente'),
-(3, 0, 0.0, 'regular', 'No asistió');
+(5, 35, 2.4, 'excelente', 'Muy tranquilo'),
+(6, 90, 5.1, 'bueno', 'Se emocionó con otros perros'),
+(7, 55, 4.0, 'excelente', 'Muy obediente'),
+(8, 0, 0.0, 'regular', 'No asistió');
 
 -- 12. Requisitos para pasear perros
 INSERT INTO requisitos_perros (perro_id, requisito) VALUES
@@ -241,7 +241,7 @@ INSERT INTO equipamiento (nombre, descripcion, cantidad_disponible) VALUES
 
 -- 14. Préstamo de equipamiento
 INSERT INTO prestamo_equipamiento (registro_caminata_id, equipamiento_id, cantidad, devuelto) VALUES
-(1, 1, 1, TRUE),
-(2, 2, 1, FALSE),
-(3, 3, 1, FALSE),
-(4, 4, 1, TRUE);
+(5, 1, 1, TRUE),
+(6, 2, 1, FALSE),
+(7, 3, 1, FALSE),
+(8, 4, 1, TRUE);
