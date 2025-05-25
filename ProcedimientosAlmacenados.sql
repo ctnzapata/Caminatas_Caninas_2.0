@@ -523,5 +523,77 @@ CREATE PROCEDURE EliminarHistorialCaminata(IN p_id INT)
 BEGIN
     DELETE FROM historial_caminatas WHERE id = p_id;
 END //
+-- ================================================
+-- CREACIÓN DE TABLA: PerfilesVoluntarios
+-- ================================================
+CREATE TABLE IF NOT EXISTS PerfilesVoluntarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    telefono VARCHAR(20),
+    direccion VARCHAR(255),
+    usuario INT,
+    experiencia TEXT,
+    FOREIGN KEY (usuario) REFERENCES Usuarios(id)
+);
+
+-- ================================================
+-- PROCEDIMIENTO: Obtener todos los perfiles
+-- ================================================
+DELIMITER $$
+
+CREATE PROCEDURE ObtenerPerfilesVoluntarios()
+BEGIN
+    SELECT * FROM perfiles_voluntarios;
+END $$
+
+-- ================================================
+-- PROCEDIMIENTO: Obtener perfil por ID
+-- ================================================
+CREATE PROCEDURE ObtenerPerfilVoluntarioPorID(IN p_id INT)
+BEGIN
+    SELECT * FROM perfiles_voluntarios WHERE id = p_id;
+END $$
+
+-- ================================================
+-- PROCEDIMIENTO: Crear perfil voluntario
+-- ================================================
+CREATE PROCEDURE CrearPerfilVoluntario(
+    IN p_telefono VARCHAR(20),
+    IN p_direccion VARCHAR(255),
+    IN p_usuario INT,
+    IN p_experiencia TEXT
+)
+BEGIN
+    INSERT INTO perfiles_voluntarios (telefono, direccion, usuario, experiencia)
+    VALUES (p_telefono, p_direccion, p_usuario, p_experiencia);
+
+    SELECT LAST_INSERT_ID();
+END $$
+
+-- ================================================
+-- PROCEDIMIENTO: Actualizar perfil voluntario
+-- ================================================
+CREATE PROCEDURE ActualizarPerfilVoluntario(
+    IN p_id INT,
+    IN p_telefono VARCHAR(20),
+    IN p_direccion VARCHAR(255),
+    IN p_usuario INT,
+    IN p_experiencia TEXT
+)
+BEGIN
+    UPDATE perfiles_voluntarios
+    SET telefono = p_telefono,
+        direccion = p_direccion,
+        usuario = p_usuario,
+        experiencia = p_experiencia
+    WHERE id = p_id;
+END $$
+
+-- ================================================
+-- PROCEDIMIENTO: Eliminar perfil voluntario
+-- ================================================
+CREATE PROCEDURE EliminarPerfilVoluntario(IN p_id INT)
+BEGIN
+    DELETE FROM perfiles_voluntarios WHERE id = p_id;
+END $$
 
 DELIMITER ;
