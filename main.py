@@ -4,6 +4,8 @@ from Repositorios.PerrosRepositorio import PerrosRepositorio
 from Repositorios.RefugiosRepositorio import RefugiosRepositorio
 from Repositorios.EquipamientoRepositorio import EquipamientoRepositorio
 from Repositorios.HorariosRepositorio import HorariosRepositorio
+from Repositorios.PerfilesVoluntariosRepositorio import PerfilesVoluntariosRepositorio
+from Entidades.PerfilesVoluntarios import PerfilesVoluntarios
 from Entidades.Usuarios import Usuarios
 from Entidades.Perros import Perros
 from Entidades.Refugios import Refugios
@@ -66,6 +68,17 @@ def mostrar_menu_horarios():
     print("4. Eliminar Horario")
     print("5. Buscar Horario por ID")
     print("6. Volver al menú principal")
+    
+def mostrar_menu_principal():
+    print("\n--- MENÚ PRINCIPAL ---")
+    print("1. Consultar Caminatas")
+    print("2. Gestionar Usuarios (CRUD)")
+    print("3. Gestionar Perros (CRUD)")
+    print("4. Gestionar Refugios (CRUD)")
+    print("5. Gestionar Equipamiento (CRUD)")
+    print("6. Gestionar Horarios (CRUD)")
+    print("7. Gestionar Perfiles Voluntarios (CRUD)")
+    print("8. Salir")
 
 
 def consultar_caminatas():
@@ -419,6 +432,58 @@ def gestionar_horarios():
             print("❌ Opción no válida. Intente de nuevo.")
     
     repo.cerrar_conexion()
+    
+def gestionar_perfiles_voluntarios():
+    repo = PerfilesVoluntariosRepositorio()
+    
+    while True:
+        print("\n--- GESTIÓN DE PERFILES VOLUNTARIOS ---")
+        print("1. Listar Perfiles")
+        print("2. Agregar Perfil")
+        print("3. Actualizar Perfil")
+        print("4. Eliminar Perfil")
+        print("5. Volver al menú principal")
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == "1":
+            perfiles = repo.obtener_todos()
+            for p in perfiles:
+                print(f"{p.GetId()} - Usuario ID: {p.GetUsuario()} | Experiencia: {p.GetExperiencia()} | Disponibilidad: {p.GetDisponibilidad()}")
+        
+        elif opcion == "2":
+            perfil = PerfilesVoluntarios()
+            perfil.SetUsuario(int(input("ID Usuario: ")))
+            perfil.SetExperiencia(input("Experiencia: "))
+            perfil.SetDisponibilidad(input("Disponibilidad (días/horas): "))
+            nuevo_id = repo.crear(perfil)
+            print(f"✅ Perfil creado con ID: {nuevo_id}")
+        
+        elif opcion == "3":
+            id_perfil = int(input("ID del perfil a actualizar: "))
+            perfil = repo.obtener_por_id(id_perfil)
+            if perfil:
+                perfil.SetExperiencia(input(f"Experiencia ({perfil.GetExperiencia()}): ") or perfil.GetExperiencia())
+                perfil.SetDisponibilidad(input(f"Disponibilidad ({perfil.GetDisponibilidad()}): ") or perfil.GetDisponibilidad())
+                if repo.actualizar(perfil):
+                    print("✅ Perfil actualizado correctamente.")
+                else:
+                    print("❌ Error al actualizar el perfil.")
+            else:
+                print("❌ Perfil no encontrado.")
+
+        elif opcion == "4":
+            id_perfil = int(input("ID del perfil a eliminar: "))
+            if repo.eliminar(id_perfil):
+                print("✅ Perfil eliminado correctamente.")
+            else:
+                print("❌ Error al eliminar el perfil.")
+        
+        elif opcion == "5":
+            break
+        else:
+            print("❌ Opción no válida. Intente de nuevo.")
+    
+    repo.cerrar_conexion()
 
 
 def main():
@@ -439,7 +504,9 @@ def main():
         elif opcion == "6":
             gestionar_horarios()
         elif opcion == "7":
-            print("👋 Saliendo del sistema...")
+            gestionar_perfiles_voluntarios()
+        elif opcion == "8":
+            print("Saliendo del programa.")
             break
         else:
             print("❌ Opción no válida. Intente nuevamente.")

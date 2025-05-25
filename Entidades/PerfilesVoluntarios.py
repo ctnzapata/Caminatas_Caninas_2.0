@@ -1,45 +1,44 @@
-import Usuarios;
-
 class PerfilesVoluntarios:
-	id: int = 0;
+    def __init__(self):
+        self.id: int = 0
+        self.usuario: int = 0
+        self.experiencia: str = None
+        self.disponibilidad: str = None
+        self.telefono: str = None
+        self.direccion: str = None
 
-	def GetId(self) -> int:
-		return self.id;
-	def SetId(self, value: int) -> None:
-		self.id = value;
+    def GetId(self):
+        return self.id
 
-	telefono: str = None;
+    def SetId(self, id):
+        self.id = id
 
-	def GetTelefono(self) -> str:
-		return self.telefono;
-	def SetTelefono(self, value: str) -> None:
-		self.telefono = value;
+    def GetUsuario(self):
+        return self.usuario
 
-    direccion: str = None;
+    def SetUsuario(self, usuario):
+        self.usuario = usuario
 
-    def GetDireccion(self) -> str:
-        return self.direccion;
-    def SetDireccion(self, value:str) -> None:
-        self.direccion = value;
+    def GetExperiencia(self):
+        return self.experiencia
 
-    usuario: int = None;
+    def SetExperiencia(self, experiencia):
+        self.experiencia = experiencia
 
-    def GetUsuario(self) -> int:
-        return self.usuario;
-    def SetUsuario(self, value:int) -> None:
-        self.usuario = value;
+    def GetDisponibilidad(self):
+        return self.disponibilidad
 
-    experiencia: str = None;
+    def SetDisponibilidad(self, disponibilidad):
+        self.disponibilidad = disponibilidad
 
-    def GetExperiencia(self) -> str:
-        return self.experiencia;
-    def SetExperiencia(self, value:str) -> None:
-        self.experiencia = value;
+    def GetTelefono(self):
+        return self.telefono
 
-    #Relación
-    _usuario: Usuarios = None;
+    def SetTelefono(self, telefono):
+        self.telefono = telefono
 
-    def Get_Usuario(self) -> Usuarios:
-        return self._usuario;
-    def Set_Usuario(self, value: Usuarios) -> None:
-        self._usuario = value;
+    def GetDireccion(self):
+        return self.direccion
+
+    def SetDireccion(self, direccion):
+        self.direccion = direccion
