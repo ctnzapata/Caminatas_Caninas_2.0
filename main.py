@@ -4,19 +4,16 @@ from Repositorios.PerrosRepositorio import PerrosRepositorio
 from Repositorios.RefugiosRepositorio import RefugiosRepositorio
 from Repositorios.EquipamientoRepositorio import EquipamientoRepositorio
 from Repositorios.HorariosRepositorio import HorariosRepositorio
-<<<<<<< HEAD
 from Repositorios.HistorialCaminatasRepositorio import HistorialCaminatasRepositorio
-
-=======
 from Repositorios.PerfilesVoluntariosRepositorio import PerfilesVoluntariosRepositorio
-from Entidades.PerfilesVoluntarios import PerfilesVoluntarios
->>>>>>> 2bacb93aa9d69ec23e14d5a92a27e38be6f48aed
+
 from Entidades.Usuarios import Usuarios
 from Entidades.Perros import Perros
 from Entidades.Refugios import Refugios
 from Entidades.Equipamiento import Equipamiento
 from Entidades.Horarios import Horarios
 from Entidades.HistorialCaminatas import HistorialCaminatas
+from Entidades.PerfilesVoluntarios import PerfilesVoluntarios
 
 
 import datetime
@@ -30,7 +27,8 @@ def mostrar_menu_principal():
     print("5. Gestionar Equipamiento (CRUD)")
     print("6. Gestionar Horarios (CRUD)")
     print("7. Gestionar Historial Caminatas (CRUD)")
-    print("8. Salir")
+    print("8. Gestionar Perfiles Voluntarios (CRUD)")
+    print("9. Salir")
 
 def mostrar_menu_usuarios():
     print("\n--- GESTIÓN DE USUARIOS ---")
@@ -76,17 +74,6 @@ def mostrar_menu_horarios():
     print("4. Eliminar Horario")
     print("5. Buscar Horario por ID")
     print("6. Volver al menú principal")
-    
-def mostrar_menu_principal():
-    print("\n--- MENÚ PRINCIPAL ---")
-    print("1. Consultar Caminatas")
-    print("2. Gestionar Usuarios (CRUD)")
-    print("3. Gestionar Perros (CRUD)")
-    print("4. Gestionar Refugios (CRUD)")
-    print("5. Gestionar Equipamiento (CRUD)")
-    print("6. Gestionar Horarios (CRUD)")
-    print("7. Gestionar Perfiles Voluntarios (CRUD)")
-    print("8. Salir")
 
 def mostrar_menu_historial_caminatas():
     print("\n--- GESTIÓN DE HISTORIAL DE CAMINATAS ---")
@@ -600,10 +587,9 @@ def main():
         elif opcion == "7":
             gestionar_historial_caminatas()
         elif opcion == "8":
-            print("👋 Saliendo del sistema...")
             gestionar_perfiles_voluntarios()
-        elif opcion == "8":
-            print("Saliendo del programa.")
+        elif opcion == "9":
+            print("👋 Saliendo del sistema...")
             break
         else:
             print("❌ Opción no válida. Intente nuevamente.")
