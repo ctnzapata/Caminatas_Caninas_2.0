@@ -31,16 +31,19 @@ class EquipamientoRepositorio:
 
     def crear(self, equipamiento: Equipamiento) -> int:
         """Crea un nuevo equipamiento y devuelve su ID"""
+        self.cursor.execute("SET @nuevo_id = 0")
         self.cursor.execute(
-            "{CALL CrearEquipamiento(?, ?, ?)}",
+            "{CALL CrearEquipamiento(?, ?, ?,@nuevo_id)}",
             (
                 equipamiento.GetNombre(),
                 equipamiento.GetDescripcion(),
                 equipamiento.GetCantidad_disponible()
             )
         )
+        self.cursor.execute("SELECT @nuevo_id")
+        nuevo_id = self.cursor.fetchone()[0]
         self.conn.commit()
-        return self.cursor.fetchval()
+        return nuevo_id
 
     def actualizar(self, equipamiento: Equipamiento) -> bool:
         """Actualiza la información de un equipamiento existente"""

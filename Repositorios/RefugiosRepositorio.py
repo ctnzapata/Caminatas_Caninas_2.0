@@ -31,8 +31,9 @@ class RefugiosRepositorio:
 
     def crear(self, refugio: Refugios) -> int:
         """Crea un nuevo refugio y devuelve su ID"""
+        self.cursor.execute("SET @nuevo_id = 0")
         self.cursor.execute(
-            "{CALL CrearRefugio(?, ?, ?, ?)}",
+            "{CALL CrearRefugio(?, ?, ?, ?,@nuevo_id)}",
             (
                 refugio.GetNombre(),
                 refugio.GetDireccion(),
@@ -40,8 +41,10 @@ class RefugiosRepositorio:
                 refugio.GetCorreo()
             )
         )
+        self.cursor.execute("SELECT @nuevo_id")
+        nuevo_id = self.cursor.fetchone()[0]
         self.conn.commit()
-        return self.cursor.fetchval()
+        return nuevo_id
 
     def actualizar(self, refugio: Refugios) -> bool:
         """Actualiza la información de un refugio existente"""
