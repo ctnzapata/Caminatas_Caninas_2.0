@@ -32,8 +32,9 @@ class PerrosRepositorio:
 
     def crear(self, perro: Perros) -> int:
         """Crea un nuevo perro y devuelve su ID"""
+        self.cursor.execute("SET @nuevo_id = 0")
         self.cursor.execute(
-            "{CALL CrearPerro(?, ?, ?, ?, ?, ?, ?, ?)}",
+            "{CALL CrearPerro(?, ?, ?, ?, ?, ?, ?, ?,@nuevo_id)}",
             (
                 perro.GetNombre(),
                 perro.GetEdad(),
@@ -45,8 +46,10 @@ class PerrosRepositorio:
                 perro.GetRefugio()
             )
         )
+        self.cursor.execute("SELECT @nuevo_id")
+        nuevo_id = self.cursor.fetchone()[0]
         self.conn.commit()
-        return self.cursor.fetchval()
+        return nuevo_id
 
     def actualizar(self, perro: Perros) -> bool:
         """Actualiza la información de un perro existente"""

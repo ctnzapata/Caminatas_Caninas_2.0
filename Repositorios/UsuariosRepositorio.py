@@ -32,6 +32,29 @@ class UsuariosRepositorio:
             usuarios.append(usuario)
 
         return usuarios
+    
+    def buscar_usuario_por_correo(self, correo):
+        self.cursor.execute("{CALL buscar_usuario_por_correo(?)}", correo)
+        row = self.cursor.fetchone()
+
+        if row:
+            usuario = Usuarios()
+            usuario.SetId(row[0])
+            usuario.SetNombre(row[1])
+            usuario.SetCorreo(row[2])
+
+            try:
+                contrasenia = self.encriptador.decifrar(row[3])
+            except Exception:
+                contrasenia = "[Error de descifrado]"
+
+            usuario.SetContrasenia(contrasenia)
+            usuario.SetRol(row[4])
+            usuario.SetFecha_registro(row[5])
+            return usuario
+
+        return None
+
 
     def insertar_usuario(self, usuario: Usuarios):
         contrasenia_cifrada = self.encriptador.cifrar(usuario.GetContrasenia())

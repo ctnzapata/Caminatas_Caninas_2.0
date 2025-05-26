@@ -36,7 +36,7 @@ CREATE PROCEDURE insertar_usuario(
 )
 BEGIN
     INSERT INTO usuarios (nombre, correo, contrasenia, rol, fecha_registro)
-    VALUES (p_nombre, p_correo, p_contrasena, p_rol, p_fecha_registro);
+    VALUES (p_nombre, p_correo, p_contrasenia, p_rol, p_fecha_registro);
 END //
 
 -- Actualizar un usuario
@@ -594,6 +594,18 @@ END $$
 CREATE PROCEDURE EliminarPerfilVoluntario(IN p_id INT)
 BEGIN
     DELETE FROM perfiles_voluntarios WHERE id = p_id;
+END $$
+
+DELIMITER ;
+
+--- Procedimiento obtener usuario por correo.
+DELIMITER $$
+
+CREATE PROCEDURE buscar_usuario_por_correo(IN p_correo VARCHAR(100))
+BEGIN
+    SELECT * FROM usuarios
+    WHERE correo = p_correo
+    LIMIT 1;
 END $$
 
 DELIMITER ;
